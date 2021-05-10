@@ -1,0 +1,42 @@
+<mat-card>
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <form (submit)="onSavePost()" *ngIf="!isLoading" [formGroup]="form">
+    <mat-form-field>
+      <mat-label>Title</mat-label>
+      <input matInput type="text" formControlName="title" />
+      <mat-error
+        *ngIf="form.get('title').touched && form.get('title')?.errors?.required"
+        >Please enter a post title</mat-error
+      >
+      <mat-error
+        *ngIf="
+          form.get('title').touched && form.get('title')?.errors?.minlength
+        "
+        >Please enter a title with a minimun of
+        {{ form.get("title")?.errors?.minlength?.requiredLength }}
+        characters</mat-error
+      >
+    </mat-form-field>
+    <div>
+      <button type="button" mat-stroked-button (click)="filePicker.click()">
+        Pick Image
+      </button>
+      <input type="file" #filePicker (change)="onImagePicked($event)" />
+    </div>
+    <div
+      class="image-preview"
+      *ngIf="imagePreview !== '' && imagePreview && form.get('image').valid"
+    >
+      <img [src]="imagePreview" [alt]="form.value.title" />
+    </div>
+    <mat-form-field>
+      <mat-label>Content</mat-label>
+      <textarea matInput rows="6" formControlName="content"></textarea>
+      <mat-error
+        *ngIf="form.get('content').touched && content?.errors?.required"
+        >Please enter some content</mat-error
+      >
+    </mat-form-field>
+    <button type="submit" mat-flat-button color="accent">Save Post</button>
+  </form>
+</mat-card>
